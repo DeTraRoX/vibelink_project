@@ -54,3 +54,4 @@ class Friendship(models.Model):
 
     class Meta:
         unique_together = ('from_user', 'to_user')
+#ayush dobhal
