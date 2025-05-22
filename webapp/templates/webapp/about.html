@@ -1,0 +1,86 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: url("{% static 'images/about_bg.png' %}") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+  }
+
+  .about-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 60px auto;
+    padding: 40px;
+    max-width: 800px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    color: #00b894;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: justify;
+  }
+
+  .highlight {
+    color: #00cec9;
+    font-weight: bold;
+  }
+
+  .team {
+    margin-top: 40px;
+  }
+
+  .team h2 {
+    font-size: 1.8rem;
+    color: #81ecec;
+    margin-bottom: 15px;
+  }
+
+  .team ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .team li {
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+</style>
+
+<div class="about-container">
+  <h1>About VibeLink</h1>
+  <p>
+    <span class="highlight">VibeLink</span> is a social connection platform designed to help people find meaningful relationships and friendships.
+    Whether you're looking for someone who shares your interests or simply want to meet new people, VibeLink makes it easy, safe, and fun to connect.
+  </p>
+
+  <p>
+    Built with simplicity, style, and privacy in mind, our platform allows users to register, explore, and interact with a vibrant community.
+    From casual chats to serious connections, VibeLink empowers everyone to share their vibe and build bonds that matter.
+  </p>
+
+  <div class="team">
+    <h2>Our Team</h2>
+    <ul>
+      <li>🎯 Project Lead – Ayush Dobhal</li>
+      <li>💻 Developer – Ayush , Azhar, Madhur , Sunny </li>
+      <li>🎨 UI/UX Designer – Ayush, Madhur , Sunny, Azhar</li>
+      <li>🔒 Backend & Auth – Django Framework</li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

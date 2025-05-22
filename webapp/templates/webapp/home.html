@@ -1,0 +1,67 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: url("{% static 'images/home_page.png' %}") no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    border-radius: 20px;
+    margin: 50px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    max-width: 600px;
+  }
+
+  .action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+  }
+
+  .action-button {
+    background-color: #00b894;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .action-button:hover {
+    background-color: #00a383;
+  }
+</style>
+
+<div class="home-container">
+  <h1>Welcome to <span style="color:#00b894">VibeLink</span> 👋</h1>
+  <p>You're now connected. Start vibing with others and discover meaningful connections!</p>
+  <div class="action-buttons">
+    <a href="{% url 'login' %}" class="action-button">Login</a>
+    <a href="{% url 'register' %}" class="action-button">Register</a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,314 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Whisper&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: url("{% static 'images/suggest_page_bg1.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.45);
+  }
+
+  .wrapper {
+    max-width: 1100px;
+    margin: 80px auto;
+    padding: 0 16px;
+  }
+
+  .title-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .title {
+    font-family: 'Whisper', cursive;
+    font-size: 56px;
+    color: #c9fffe;
+    line-height: 1;
+    margin: 0;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  .logo-inline {
+    width: 35px;
+    height: auto;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    padding: 24px 20px 28px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 230px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 14px;
+    border: 3px solid #00b894;
+  }
+
+  .name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 4px;
+  }
+
+  .age {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 18px;
+  }
+
+  .add-btn {
+    background: #00b894;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .add-btn:hover {
+    background: #00a57f;
+  }
+
+  .no-suggestions {
+    color: #bbb;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+  }
+
+  .avatars {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .avatars:hover {
+    opacity: 0.7;
+  }
+
+  #friends-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  #friends-sidebar {
+    position: fixed;
+    right: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background: #f1f1f1;
+    padding: 20px;
+    transition: right 0.3s;
+    z-index: 999;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    color: #000;
+  }
+
+  #friends-sidebar.active {
+    right: 0;
+  }
+
+  #friends-sidebar h3 {
+    margin-top: 0;
+  }
+
+  #friends-sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  #friends-sidebar li {
+    padding: 10px;
+    background: #ddd;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  #friends-sidebar li:hover {
+    background: #ccc;
+  }
+
+  #chat-box {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  #chat-header {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #chat-messages {
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #f9f9f9;
+  }
+
+  #chat-input {
+    border: none;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #chat-input:focus {
+    outline: none;
+  }
+</style>
+
+<div class="wrapper">
+  <div class="title-row">
+    <h1 class="title">People you might vibe with</h1>
+    <img src="{% static 'images/small_logo.png' %}" alt="VibeLink logo" class="logo-inline">
+  </div>
+
+  <div class="grid">
+    {% for p in suggestions %}
+      <div class="card">
+        <img src="{% if p.userprofile.avatar %}{{ p.userprofile.avatar.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" class="avatar" alt="{{ p.username }} avatar">
+        <div class="name">{{ p.username }}</div>
+        <div class="age">{{ p.userprofile.age }} years old</div>
+
+        {% if p not in added_friends %}
+          <form method="POST" action="{% url 'add_friend' p.id %}">
+            {% csrf_token %}
+            <button type="submit" class="add-btn">Add Friend</button>
+          </form>
+        {% else %}
+          <button class="add-btn" disabled>Friend Added</button>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="no-suggestions">No suggestions at the moment.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Friends icon -->
+<div id="friends-icon" onclick="toggleSidebar()">👥</div>
+
+<!-- Sidebar -->
+<div id="friends-sidebar">
+  <h3>My Friends</h3>
+  <ul id="friends-list">
+    {% for friend in added_friends %}
+      <li onclick="openChat('{{ friend.username }}')">{{ friend.username }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- Chat box -->
+<div id="chat-box">
+  <div id="chat-header">
+    <span id="chat-friend-name">Chat</span>
+    <button onclick="closeChat()" style="background: transparent; border: none; color: white; font-size: 16px; cursor: pointer;">✖</button>
+  </div>
+  <div id="chat-messages"></div>
+  <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="sendMessage(event)">
+</div>
+
+<!-- User avatar icon -->
+<a href="{% url 'chat_page' %}">
+  <img src="{% if request.user.userprofile.avatar %}{{ request.user.userprofile.avatar.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" alt="avatar" class="avatars">
+</a>
+
+<script>
+  function toggleSidebar() {
+    document.getElementById('friends-sidebar').classList.toggle('active');
+  }
+
+  function openChat(friendName) {
+    document.getElementById('chat-box').style.display = 'flex';
+    document.getElementById('chat-friend-name').innerText = friendName;
+    document.getElementById('chat-messages').innerHTML = '';
+  }
+
+  function closeChat() {
+    document.getElementById('chat-box').style.display = 'none';
+  }
+
+  function sendMessage(event) {
+    if (event.key === 'Enter') {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      if (message) {
+        const msgDiv = document.createElement('div');
+        msgDiv.textContent = "You: " + message;
+        document.getElementById('chat-messages').appendChild(msgDiv);
+        input.value = '';
+        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+      }
+    }
+  }
+</script>
+{% endblock %}

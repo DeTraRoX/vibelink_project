@@ -1,0 +1,94 @@
+{% load static %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VibeLink</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #3e3a5b, #4a4e69, #6c757d, #b5838d);
+            background-size: 300% 300%;
+            animation: cloudShift 20s ease infinite;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rubik Mono One', monospace;
+            min-height: 100vh;
+        }
+
+        @keyframes cloudShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .navbar-custom {
+            background-color: transparent;
+            padding: 15px 30px;
+        }
+        .nav-link {
+            color: white !important;
+            margin-right: 20px;
+        }
+        .navbar-brand img {
+            height: 50px;
+            width: auto;
+        }
+        .login-btn {
+            background-color: white;
+            color: #000;
+            border-radius: 20px;
+            padding: 5px 15px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- upper bar -->
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'images/vibelink_logo-removebg-preview.png' %}" alt="VibeLink Logo">
+    </a>
+
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/home/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/about/">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/contact/">Contact</a></li>
+
+        {% if not user.is_authenticated %}
+          {% if request.resolver_match.view_name == 'home' %}
+            <!-- Show Login button only if not authenticated and on Home page -->
+            <li class="nav-item">
+              <button class="login-btn" onclick="window.location.href='{% url 'login' %}'">Login</button>
+            </li>
+          {% endif %}
+        {% elif user.is_authenticated %}
+          <!-- Show Logout button if the user is authenticated -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<br><br><br>
+
+<div class="container">
+  {% block content %} {% endblock %}
+</div>
+
+<script src="{% static 'js/app.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
+
+</body>
+</html>

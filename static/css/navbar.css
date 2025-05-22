@@ -1,0 +1,14 @@
+.navbar-custom {
+  background-color: transparent;
+  padding: 0 30px;
+  height: 70px; /* Fix the height of the navbar */
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 50px;     /* Logo fits within navbar */
+  max-height: 100%; /* Prevents overflow */
+  width: auto;
+  object-fit: contain;
+}

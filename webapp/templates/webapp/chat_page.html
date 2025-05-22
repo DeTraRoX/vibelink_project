@@ -1,0 +1,156 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Whisper&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: url("{% static 'images/chat_page_bg.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  .chat-container {
+    display: flex;
+    height: 78vh;
+    margin: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .friends-list {
+    width: 300px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+  }
+
+  .friend {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: #fff;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+
+  .friend:hover {
+    background-color: #e0e0e0;
+  }
+
+  .friend img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 12px;
+    border: 2px solid #00b894;
+  }
+
+  .friend-name {
+    font-weight: bold;
+    color: #222;
+  }
+
+  .chat-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-header {
+    background-color: #00b894;
+    color: white;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 16px;
+    background: #fff;
+  }
+
+  .chat-input input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 10px;
+  }
+
+  .chat-input button {
+    background-color: #00b894;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .chat-input button:hover {
+    background-color: #009d77;
+  }
+
+  .logo-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .logo-title img {
+    height: 36px;
+    margin-right: 10px;
+  }
+
+  .logo-title h2 {
+    font-family: 'Whisper', cursive;
+    font-size: 36px;
+    color: #00b894;
+    margin: 0;
+  }
+</style>
+
+<div class="chat-container">
+  <div class="friends-list">
+    <div class="logo-title">
+      <img src="{% static 'images/small_logo.png' %}" alt="Logo">
+      <h2>Friends</h2>
+    </div>
+    {% for friend in friends %}
+    <div class="friend">
+      <img src="{% static 'images/avatars/'|add:friend.avatars %}" alt="{{ friend.name }}">
+      <div class="friend-name">{{ friend.name }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="chat-box">
+    <div class="chat-header">
+      Chat with {{ active_friend.name }}
+    </div>
+    <div class="chat-messages">
+      <!-- You can list chat messages here later -->
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Type your message..." />
+      <button>Send</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
