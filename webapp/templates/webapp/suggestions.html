@@ -61,6 +61,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     width: 230px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: #222;
   }
 
   .card:hover {
@@ -105,6 +106,11 @@
     background: #00a57f;
   }
 
+  .add-btn[disabled] {
+    background: #aaa;
+    cursor: default;
+  }
+
   .no-suggestions {
     color: #bbb;
     text-align: center;
@@ -112,6 +118,64 @@
     margin-top: 40px;
   }
 
+  /* Friends icon */
+  #friends-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Sidebar styles */
+  #friends-sidebar {
+    position: fixed;
+    right: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background: #f1f1f1;
+    padding: 20px;
+    transition: right 0.3s;
+    z-index: 999;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    color: #000;
+    overflow-y: auto;
+  }
+
+  #friends-sidebar.active {
+    right: 0;
+  }
+
+  #friends-sidebar h3 {
+    margin-top: 0;
+  }
+
+  #friends-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #friends-sidebar li {
+    padding: 10px;
+    background: #ddd;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  #friends-sidebar li:hover {
+    background: #ccc;
+  }
+
+  /* User avatar icon */
   .avatars {
     width: 40px;
     height: 40px;
@@ -127,102 +191,6 @@
 
   .avatars:hover {
     opacity: 0.7;
-  }
-
-  #friends-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #007bff;
-    color: white;
-    font-size: 24px;
-    padding: 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  #friends-sidebar {
-    position: fixed;
-    right: -250px;
-    top: 0;
-    width: 250px;
-    height: 100%;
-    background: #f1f1f1;
-    padding: 20px;
-    transition: right 0.3s;
-    z-index: 999;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
-    color: #000;
-  }
-
-  #friends-sidebar.active {
-    right: 0;
-  }
-
-  #friends-sidebar h3 {
-    margin-top: 0;
-  }
-
-  #friends-sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  #friends-sidebar li {
-    padding: 10px;
-    background: #ddd;
-    margin-bottom: 5px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  #friends-sidebar li:hover {
-    background: #ccc;
-  }
-
-  #chat-box {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 300px;
-    background: white;
-    border: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    z-index: 1000;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  #chat-header {
-    background: #007bff;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  #chat-messages {
-    height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    background: #f9f9f9;
-  }
-
-  #chat-input {
-    border: none;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  #chat-input:focus {
-    outline: none;
   }
 </style>
 
@@ -257,24 +225,14 @@
 <!-- Friends icon -->
 <div id="friends-icon" onclick="toggleSidebar()">👥</div>
 
-<!-- Sidebar -->
+<!-- Sidebar showing only friend names, no avatars -->
 <div id="friends-sidebar">
   <h3>My Friends</h3>
   <ul id="friends-list">
     {% for friend in added_friends %}
-      <li onclick="openChat('{{ friend.username }}')">{{ friend.username }}</li>
+      <li>{{ friend.username }}</li>
     {% endfor %}
   </ul>
-</div>
-
-<!-- Chat box -->
-<div id="chat-box">
-  <div id="chat-header">
-    <span id="chat-friend-name">Chat</span>
-    <button onclick="closeChat()" style="background: transparent; border: none; color: white; font-size: 16px; cursor: pointer;">✖</button>
-  </div>
-  <div id="chat-messages"></div>
-  <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="sendMessage(event)">
 </div>
 
 <!-- User avatar icon -->
@@ -284,31 +242,9 @@
 
 <script>
   function toggleSidebar() {
-    document.getElementById('friends-sidebar').classList.toggle('active');
-  }
-
-  function openChat(friendName) {
-    document.getElementById('chat-box').style.display = 'flex';
-    document.getElementById('chat-friend-name').innerText = friendName;
-    document.getElementById('chat-messages').innerHTML = '';
-  }
-
-  function closeChat() {
-    document.getElementById('chat-box').style.display = 'none';
-  }
-
-  function sendMessage(event) {
-    if (event.key === 'Enter') {
-      const input = document.getElementById('chat-input');
-      const message = input.value.trim();
-      if (message) {
-        const msgDiv = document.createElement('div');
-        msgDiv.textContent = "You: " + message;
-        document.getElementById('chat-messages').appendChild(msgDiv);
-        input.value = '';
-        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
-      }
-    }
+    const sidebar = document.getElementById('friends-sidebar');
+    sidebar.classList.toggle('active');
   }
 </script>
+
 {% endblock %}

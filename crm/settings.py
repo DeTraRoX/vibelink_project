@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'webapp',
+    # 'channels',  # Removed channels app
 ]
 
 MIDDLEWARE = [
@@ -70,8 +71,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'crm.wsgi.application'
-
+# Removed ASGI_APPLICATION because no Channels support now
+# ASGI_APPLICATION = 'crm.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -121,20 +122,23 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Media files
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Removed CHANNEL_LAYERS as no Channels
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email settings (configured for Gmail SMTP)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your_email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your_app_password'
+EMAIL_HOST_USER = 'ayushdobhal850@gmail.com'          # Replace with your Gmail
+EMAIL_HOST_PASSWORD = 'wveg qtyk qwcp raqo'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

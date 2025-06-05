@@ -8,6 +8,11 @@ from datetime import datetime
 from .models import UserProfile, Friendship, Interest
 from .forms import RegisterForm, ContactForm, UserLoginForm
 from django.db.models import Q
+from .forms import ContactForm
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.conf import settings
+from .models import ContactMessage
 
 
 
@@ -105,8 +110,26 @@ def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            messages.success(request, "Thank you for reaching out! We'll get back to you soon.")
-            return redirect('contact')
+            contact_message = form.save()  # Save to DB
+
+            # Prepare email content
+            subject = f"New Contact Form Submission from {contact_message.name}"
+            message = f"Name: {contact_message.name}\nEmail: {contact_message.email}\n\nMessage:\n{contact_message.message}"
+
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[settings.EMAIL_HOST_USER],
+                    fail_silently=False,
+                )
+                messages.success(request, "Your message was sent successfully!")
+                return redirect('contact')
+            except Exception as e:
+                messages.error(request, f"Failed to send email: {e}")
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = ContactForm()
 
